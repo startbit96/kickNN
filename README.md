@@ -1,0 +1,2 @@
+# kickNN
+KI Tippgenerator Bundesliga
