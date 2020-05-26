@@ -12,8 +12,8 @@
 clc;
 
 % Definition der Trainings- und Testdaten.
-saisons_training = 1968:2010;
-saisons_test = 2011:2018;
+saisons_training = 1990:2014;
+saisons_test = 2015:2018;
 
 pos_training = [];
 for saison = saisons_training
@@ -21,14 +21,14 @@ for saison = saisons_training
 end
 
 % Theta abspeichern.
-Theta_speicher_af5 = cell(640, 1);
+Theta_speicher_punkte = cell(10, 1);
 n_theta = 1;
 
 % Zeitmessung beginnen.
 tStartzeit_Gesamt = tic;
 
 % Verschiedene Features.
-variation_features = 5;
+variation_features = 7;
 for i_feature = variation_features
     if (i_feature == 1)
         X = feature_tabelle.feature1;
@@ -66,14 +66,14 @@ for i_feature = variation_features
     variation_aktivierungsfunktion = {  'Swish'};
     for aktivierungsfunktion = variation_aktivierungsfunktion
         % Verschiedene Anzahl an Hidden-Layers.
-        variation_anzahl_hiddenlayer = [1, 2];
+        variation_anzahl_hiddenlayer = 2;
         for anzahl_hiddenlayer = variation_anzahl_hiddenlayer
             % Verschiedene Anzahl an Knoten eines Hidden-Layers.
-            variation_anzahl_knoten_hiddenlayer = [10, 15, 25, 40];
+            variation_anzahl_knoten_hiddenlayer = 10;
             for anzahl_knoten_hiddenlayer = variation_anzahl_knoten_hiddenlayer
                 % Variation des Regularization-Parameters Lambda.
-                variation_lambda = [0, 0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1];
-                parfor i_lambda = 1:1:numel(variation_lambda)
+                variation_lambda = 0.001;
+                for i_lambda = 1:1:numel(variation_lambda)
                     lambda = variation_lambda(i_lambda);
                     % Verschiedene Anzahl an Lern-Iterationen.
                     variation_iterationen = 1000;
@@ -84,7 +84,7 @@ for i_feature = variation_features
                         anzahl_wiederholungen = 10;
                         for wiederholungen = 1:1:anzahl_wiederholungen
                             % Ausgabe des aktuellen Fortschritts.
-                            disp(['Untersuchungsumfang ' num2str(n_theta) ' / 640 ...']);
+                            disp(['Untersuchungsumfang ' num2str(n_theta) ' / 10 ...']);
                             disp(' ');
                             % Initialisierungs-Parameter generieren.
                             % Die Matrizen haben die Größe (s_j+1 x (s_j + 1)) --> +1 aufgrund der Bias-Unit.
@@ -99,7 +99,7 @@ for i_feature = variation_features
                             options = optimset('MaxIter', iterationen);
 
                             % Funktionszeiger auf die Costfunction erzeugen.
-                            kostenfunktion = @(p) kostenfunktion_V001(  p, ...
+                            kostenfunktion = @(p) kostenfunktion_V002(  p, ...
                                                                         anzahl_features, ...
                                                                         anzahl_hiddenlayer, ...
                                                                         anzahl_knoten_hiddenlayer, ...
